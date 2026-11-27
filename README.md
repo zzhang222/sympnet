@@ -22,6 +22,11 @@ The paper states the theorem for all of `SP^r(U)` and arbitrary open `U`; that v
 (G-SympNets are injective). See `Sympnet/Counterexample.lean` (`paper_theorem5_false`). The
 error is in the paper's Lemma 4, which overstates Turaev's theorem.
 
+In practice the two extra assumptions almost never matter. SympNets are used to learn phase
+flows of Hamiltonian systems. A phase flow is always injective, since its inverse is the flow
+backward in time. And training data usually lives on a ball or a box, which is convex, or can
+be enclosed in one. The theorem as proved here covers that case.
+
 Both results the paper cites without proof are proved here:
 * **Lemma 2 (Hornik–Stinchcombe–White)**: `SympNet.hornikDensity`.
 * **Lemma 4 (Turaev), convex/injective form**: `SympNet.turaevHenon`, via
