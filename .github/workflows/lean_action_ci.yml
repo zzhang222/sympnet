@@ -16,6 +16,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Building API docs for all of Mathlib needs far more disk than the runner
+      # has free by default; without this the job dies with "No space left on device".
+      - name: Free disk space
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          sudo docker image prune --all --force || true
+          df -h /
       - uses: actions/checkout@v7
       - uses: leanprover/lean-action@v1
+      # Docs take hours on a cold cache, so build and deploy them only from main.
       - uses: leanprover-community/docgen-action@v1
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
